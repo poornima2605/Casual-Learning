@@ -52,9 +52,10 @@ class Model1(Model):
     def forward(self, inputs):
         # Compute the (negative) log-likelihood with the
         # decomposition p(x_A, x_B ,x_C) = p(x_A) p(x_B | x_A) p(x_C | x_B)
-        
+        #print(inputs)
         inputs_A, inputs_B, inputs_C = torch.split(inputs, 1, dim=1)
-        inputs_A, inputs_B, inputs_C = inputs_A.squeeze(1), inputs_B.squeeze(1)
+        #print(inputs_C)
+        inputs_A, inputs_B, inputs_C = inputs_A.squeeze(1), inputs_B.squeeze(1), inputs_C.squeeze(1)
 
         return self.p_A(inputs_A) + self.p_B_A(inputs_A, inputs_B) + self.p_C_B(inputs_B, inputs_C)
 
@@ -84,9 +85,9 @@ class Model2(Model):
         # decomposition p(x_A, x_B, x_C) = p(x_C)p(x_B | x_C)p(x_A|x_B)
         
         inputs_A, inputs_B, inputs_C = torch.split(inputs, 1, dim=1)
-        inputs_A, inputs_B, inputs_C = inputs_A.squeeze(1), inputs_B.squeeze(1)
+        inputs_A, inputs_B, inputs_C = inputs_A.squeeze(1), inputs_B.squeeze(1), inputs_C.squeeze(1)
         
-        return self.p_B(inputs_C) + self.p_B_C(inputs_C, inputs_B) + self.p_A_B(inputs_B, inputs_A) 
+        return self.p_C(inputs_C) + self.p_B_C(inputs_C, inputs_B) + self.p_A_B(inputs_B, inputs_A) 
 
     def set_analytical_maximum_likelihood(self, pi_A, pi_B_A, pi_C_B):
         pi_A_th = torch.from_numpy(pi_A)
@@ -118,10 +119,10 @@ class StructuralModel(BivariateStructuralModel):
         self.w = nn.Parameter(torch.tensor(0., dtype=torch.float64))
     
     def set_analytical_maximum_likelihood(self, pi_A, pi_B_A, pi_B, pi_C_B):
-        self.model_A_B_C.set_analytical_maximum_likelihood(pi_A, pi_B_A, pi_B, pi_C_B)
-        self.model_C_B_A.set_analytical_maximum_likelihood(pi_A, pi_B_A, pi_B, pi_C_B)
+        self.model_A_B_C.set_analytical_maximum_likelihood(pi_A, pi_B_A, pi_C_B)
+        self.model_C_B_A.set_analytical_maximum_likelihood(pi_A, pi_B_A, pi_C_B)
 
-    def set_maximum_likelihood(self, inputs1):
+    def set_maximum_likelihood(self, inputs):
         self.model_A_B_C.set_maximum_likelihood(inputs)
         self.model_C_B_A.set_maximum_likelihood(inputs)
 
