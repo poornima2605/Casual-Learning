@@ -85,9 +85,33 @@ def generate_data_categorical_3_variables(num_samples, pi_A, pi_B_A, pi_C_B):
     x_B = np.dot(x_Bs, r)
     
     x_Cs = np.zeros((num_samples, N), dtype=np.int64)
-    for i in range(num_samples):
-        x_Cs[i] = np.random.multinomial(1, pi_C_B[x_B[i]], size=1)
+    for j in range(num_samples):
+        x_Cs[j] = np.random.multinomial(1, pi_C_B[x_B[j]], size=1)
     x_C = np.dot(x_Cs, r)
+    
+    return np.vstack((x_A, x_B,x_C)).T.astype(np.int64)
+
+def generate_data_categorical_3_variables_dependency(num_samples, pi_A, pi_B_A_C, pi_C):
+    """Sample data using ancestral sampling
+    
+    x_A ~ Categorical(pi_A)
+    x_B ~ Categorical(pi_C)
+    x_C ~ Categorical(pi_B_A_C[x_A,x_C])
+    """
+    N = pi_A.shape[0]
+    r = np.arange(N)
+    
+    x_A = np.dot(np.random.multinomial(1, pi_A, size=num_samples), r)
+    x_C = np.dot(np.random.multinomial(1, pi_C, size=num_samples), r)
+    
+    x_Bs = np.zeros((num_samples, N), dtype=np.int64)
+    
+    #print("A:",x_A)
+    #print("C:",x_C)
+    
+    for i in range(num_samples):
+        x_Bs[i] = np.random.multinomial(1, np.intersect1d(pi_B_A_C[x_A[i]],pi_B_A_C[x_A[i]]), size=1)
+    x_B = np.dot(x_Bs, r)
     
     return np.vstack((x_A, x_B,x_C)).T.astype(np.int64)
 
