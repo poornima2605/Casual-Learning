@@ -125,21 +125,21 @@ class Model3(Model_new):
         
         inputs_A, inputs_B, inputs_C = inputs_A.squeeze(1), inputs_B.squeeze(1), inputs_C.squeeze(1)
 
-        return self.p_B(inputs_B) + self.p_B_A(inputs_A, inputs_B) + self.p_B_C(inputs_C, inputs_B)
+        return self.p_B(inputs_B) + self.p_B_A(inputs_B, inputs_A) + self.p_B_C(inputs_B, inputs_C)
 
     def set_analytical_maximum_likelihood(self, pi_B, pi_B_A,pi_B_C):
-        pi_B_th = torch.from_numpy(pi_A)
+        pi_B_th = torch.from_numpy(pi_B)
         pi_B_A_th = torch.from_numpy(pi_B_A)
         pi_B_C_th = torch.from_numpy(pi_B_C)
         
-        self.p_B.w.data = torch.log(pi_A_th)
+        self.p_B.w.data = torch.log(pi_B_th)
         self.p_B_A.w.data = torch.log(pi_B_A_th)
         self.p_B_C.w.data = torch.log(pi_B_C_th)
 
     def init_parameters(self):
         self.p_B.init_parameters()
-        self.p_B_A.init_parameters()
-        self.p_B_C.init_parameters()
+        self.p_A_B.init_parameters()
+        self.p_C_B.init_parameters()
 
 class Model2(Model):
     def __init__(self, N):
@@ -194,7 +194,7 @@ class Model4(Model_new):
         inputs_A, inputs_B, inputs_C = torch.split(inputs, 1, dim=1)
         inputs_A, inputs_B, inputs_C = inputs_A.squeeze(1), inputs_B.squeeze(1), inputs_C.squeeze(1)
         
-        return self.p_A(inputs_A) + (self.p_A_B(inputs_B, inputs_A) * self.p_C_B(inputs_B, inputs_C) * self.p_B(inputs_B))/ (self.p_A(inputs_A) * self.p_C(inputs_C)) + self.p_C(inputs_C) 
+        return self.p_A(inputs_A) + (self.p_A_B(inputs_A, inputs_B) * self.p_C_B(inputs_C, inputs_A) * self.p_B(inputs_B))/ (self.p_A(inputs_A) * self.p_C(inputs_C)) + self.p_C(inputs_C) 
 
     def set_analytical_maximum_likelihood(self, pi_B, pi_B_A, pi_B_C):
         pi_B_th = torch.from_numpy(pi_B)
@@ -213,7 +213,7 @@ class Model4(Model_new):
         self.p_C.w.data = log_p_C
 
     def init_parameters(self):
-        #self.p_B.init_parameters()
+        self.p_B.init_parameters()
         self.p_C_B.init_parameters()
         self.p_A_B.init_parameters()
         self.p_C.init_parameters()
