@@ -113,7 +113,7 @@ def generate_data_categorical_3_variables_dependency(num_samples, pi_A, pi_B_A_C
         x_Bs[i] = np.random.multinomial(1, np.intersect1d(pi_B_A_C[x_A[i]],pi_B_A_C[x_A[i]]), size=1)
     x_B = np.dot(x_Bs, r)
     
-    return np.vstack((x_A, x_B,x_C)).T.astype(np.int64)
+    return np.vstack((x_A, x_B, x_C)).T.astype(np.int64)
 
 def generate_data_multivariate_normal(num_samples, mean_A, cov_A, beta_0, beta_1, cov_B_A):
     """ Sample data using ancestral sampling
