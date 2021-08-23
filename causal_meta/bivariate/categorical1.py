@@ -150,7 +150,7 @@ class Model2(Model):
 
     def forward(self, inputs):
         # Compute the (negative) log-likelihood with the
-        # decomposition p(x_A, x_B, x_C) = p(x_C)p(x_B | x_C)p(x_A|x_B)
+        # decomposition p(x_A, x_B, x_C) = p(x_C)p(x_B | x_C)p(x_A | x_B)
         
         inputs_A, inputs_B, inputs_C = torch.split(inputs, 1, dim=1)
         inputs_A, inputs_B, inputs_C = inputs_A.squeeze(1), inputs_B.squeeze(1), inputs_C.squeeze(1)
@@ -190,6 +190,7 @@ class Model4(Model_new):
     def forward(self, inputs):
         # Compute the (negative) log-likelihood with the
         # decomposition p(x_A, x_B, x_C) = p(x_C)p(x_B | x_A, x_C)p(x_A)
+        # Naive Bayes Theorem p(x_B | x_A, x_C)= ( p(x_B) p(x_A | x_B) p(x_C | x_B) ) / ( p(x_A) p(x_B))
         
         inputs_A, inputs_B, inputs_C = torch.split(inputs, 1, dim=1)
         inputs_A, inputs_B, inputs_C = inputs_A.squeeze(1), inputs_B.squeeze(1), inputs_C.squeeze(1)
