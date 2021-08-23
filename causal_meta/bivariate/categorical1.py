@@ -194,7 +194,7 @@ class Model4(Model_new):
         inputs_A, inputs_B, inputs_C = torch.split(inputs, 1, dim=1)
         inputs_A, inputs_B, inputs_C = inputs_A.squeeze(1), inputs_B.squeeze(1), inputs_C.squeeze(1)
         
-        return self.p_A(inputs_A) + (self.p_A_B(inputs_A, inputs_B) * self.p_C_B(inputs_C, inputs_A) * self.p_B(inputs_B))/ (self.p_A(inputs_A) * self.p_C(inputs_C)) + self.p_C(inputs_C) 
+        return self.p_A(inputs_A) + (self.p_A_B(inputs_A, inputs_B) * self.p_C_B(inputs_C, inputs_B) * self.p_B(inputs_B))/ (self.p_A(inputs_A) * self.p_C(inputs_C)) + self.p_C(inputs_C) 
 
     def set_analytical_maximum_likelihood(self, pi_B, pi_B_A, pi_B_C):
         pi_B_th = torch.from_numpy(pi_B)
