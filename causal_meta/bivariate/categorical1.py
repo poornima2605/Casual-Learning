@@ -125,7 +125,7 @@ class Model3(Model_new):
         
         inputs_A, inputs_B, inputs_C = inputs_A.squeeze(1), inputs_B.squeeze(1), inputs_C.squeeze(1)
 
-        return self.p_B(inputs_B) + self.p_B_A(inputs_B, inputs_A) + self.p_B_C(inputs_B, inputs_C)
+        return self.p_B(inputs_B) + self.p_B_A(inputs_A, inputs_B) + self.p_B_C(inputs_C, inputs_B)
 
     def set_analytical_maximum_likelihood(self, pi_B, pi_B_A,pi_B_C):
         pi_B_th = torch.from_numpy(pi_B)
