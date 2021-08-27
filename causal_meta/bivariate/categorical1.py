@@ -279,7 +279,11 @@ class Model7(Model):
         
         inputs_A, inputs_B, inputs_C = inputs_A.squeeze(1), inputs_B.squeeze(1), inputs_C.squeeze(1)
 
+<<<<<<< HEAD
         return self.p_B(inputs_B) + self.p_A_B(inputs_B, inputs_A) + self.p_C_B(inputs_B, inputs_C)
+=======
+        return self.p_B(inputs_B) + self.p_B_A(inputs_A, inputs_B) + self.p_B_C(inputs_C, inputs_B)
+>>>>>>> 5ab83fc79edfe133de75bb23df034bace1164911
 
     def set_analytical_maximum_likelihood(self, pi_A, pi_B_A,pi_C_B):
         pi_A_th = torch.from_numpy(pi_A)
@@ -312,7 +316,11 @@ class Model8(Model):
 
     def forward(self, inputs):
         # Compute the (negative) log-likelihood with the
+<<<<<<< HEAD
         # decomposition p(x_A, x_B, x_C) = p(x_C)p(x_B | x_A, x_C)p(x_A)
+=======
+        # decomposition p(x_A, x_B, x_C) = p(x_C)p(x_B | x_C)p(x_A | x_B)
+>>>>>>> 5ab83fc79edfe133de75bb23df034bace1164911
         
         inputs_A, inputs_B, inputs_C = torch.split(inputs, 1, dim=1)
         inputs_A, inputs_B, inputs_C = inputs_A.squeeze(1), inputs_B.squeeze(1), inputs_C.squeeze(1)
@@ -476,12 +484,21 @@ class Model12(Model):
 
     def forward(self, inputs):
         # Compute the (negative) log-likelihood with the
+<<<<<<< HEAD
         # decomposition p(x_A, x_B, x_C) = p(x_A)p(x_C | x_A, x_B)p(x_B)
+=======
+        # decomposition p(x_A, x_B, x_C) = p(x_C)p(x_B | x_A, x_C)p(x_A)
+        # Naive Bayes Theorem p(x_B | x_A, x_C)= ( p(x_B) p(x_A | x_B) p(x_C | x_B) ) / ( p(x_A) p(x_B))
+>>>>>>> 5ab83fc79edfe133de75bb23df034bace1164911
         
         inputs_A, inputs_B, inputs_C = torch.split(inputs, 1, dim=1)
         inputs_A, inputs_B, inputs_C = inputs_A.squeeze(1), inputs_B.squeeze(1), inputs_C.squeeze(1)
         
+<<<<<<< HEAD
         return self.p_A(inputs_A) + (self.p_C_A(inputs_A, inputs_C) * self.p_C_B(inputs_B, inputs_C) * self.p_C(inputs_C))/ (self.p_B(inputs_B) * self.p_A(inputs_A)) + self.p_B(inputs_B) 
+=======
+        return self.p_A(inputs_A) + (self.p_A_B(inputs_A, inputs_B) * self.p_C_B(inputs_C, inputs_B) * self.p_B(inputs_B))/ (self.p_A(inputs_A) * self.p_C(inputs_C)) + self.p_C(inputs_C) 
+>>>>>>> 5ab83fc79edfe133de75bb23df034bace1164911
 
     def set_analytical_maximum_likelihood(self, pi_A, pi_B_A, pi_C_B):
         pi_B_th = torch.from_numpy(pi_B)
